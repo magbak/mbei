@@ -1,0 +1,35 @@
+syntax = "proto3";
+
+package delta;
+
+enum DeltaType {
+  ADDITION = 0;
+  REMOVAL = 1;
+}
+
+message Delta {
+  InstanceNode src = 1;
+  InstanceNode trg = 2;
+  string edge_type = 3;
+  uint64 timestamp = 4;
+  DeltaType delta_type = 5;
+}
+
+message InstanceNode {
+  string instance_node_id = 1;
+  string node_type = 2;
+  NodeClass node_class = 3;
+  OptionalBytes value = 4;
+}
+
+enum NodeClass {
+  OBJECT = 0;
+  EVENT = 1;
+  MATERIAL = 2;
+  PROPERTY = 3;
+  VARIABLE = 4;
+}
+
+message OptionalBytes {
+  bytes b = 1;
+}

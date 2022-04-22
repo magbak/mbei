@@ -1,0 +1,10 @@
+[workspace]
+members = [
+    "core",
+    "component",
+    "central",
+    "grpc",
+    "integration-tests",
+    "scenario-server",
+    "testdata",
+]

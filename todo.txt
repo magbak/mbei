@@ -1,0 +1,23 @@
+TODO:
+List based producer - two days:
+X Refactor producer to optionally write to a list instead
+X Producer binary argument to produce from file input
+- Producer binary argument to send messages out of sequence
+- Modify perf-image so that it will run the performance test automatically with delay
+    - first write to file.
+    - read from file and push..
+
+Performance test automation - one day:
+- Automate the process of setting up the cluster, extracting testdata
+
+Automated test outcome evaluation - one day:
+- Automatically analyze logs to collect key metrics
+- Automate the decision of passing or failing a test
+- Automatic validation of parameters in test
+
+Document test setup - one day
+
+Nice to have:
+Simplify the creation of testdata using graphs.
+Implement DSL for testdata creation.
+Create getting started document - two days

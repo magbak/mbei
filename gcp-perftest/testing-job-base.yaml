@@ -1,0 +1,33 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: perftest-job
+  namespace: mbei
+spec:
+  template:
+    spec:
+      containers:
+        - name: perftest-container
+          image: europe-west3-docker.pkg.dev/mbei-test/mbeirepo/performance-testing:latest
+          imagePullPolicy: Always
+          volumeMounts:
+            - name: perftest-config-volume
+              mountPath: /etc/config
+          env:
+            - name: RUST_LOG
+              value: info
+      restartPolicy: Never
+      volumes:
+        - name: perftest-config-volume
+          configMap:
+            name: component-config
+      affinity:
+        podAntiAffinity: #https://medium.com/@johnjjung/building-a-kubernetes-daemonstatefulset-30ad0592d8cb
+          requiredDuringSchedulingIgnoredDuringExecution:
+            - labelSelector:
+                matchExpressions:
+                  - key: "app"
+                    operator: In
+                    values:
+                      - mbei-component
+              topologyKey: "kubernetes.io/hostname"

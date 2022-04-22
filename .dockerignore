@@ -1,0 +1,9 @@
+target
+Dockerfile
+.dockerignore
+.git
+.gitignore
+venv
+*.sh
+kubernetes
+kafka-binaries

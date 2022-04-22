@@ -1,0 +1,83 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: mbei-component
+  name: mbei-component
+  namespace: mbei
+spec:
+  clusterIP: None
+  selector:
+    app: mbei-component
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: mbei-component
+  namespace: mbei
+spec:
+  replicas: 6
+  selector:
+    matchLabels:
+      app: mbei-component
+  serviceName: mbei-component
+  template:
+    metadata:
+      labels:
+        app: mbei-component
+    spec:
+      containers:
+      - args:
+        - -q
+        - /etc/config/all-queries.yaml
+        - -a
+        - /etc/config/query-assignments.yaml
+        - -u
+        - /etc/config/names-url-map.yaml
+        - -m
+        - http://localhost:9999
+        - -p
+        - '10000'
+        command:
+        - /usr/local/bin/mbei-component
+        env:
+        - name: RUST_LOG
+          value: info
+        image: europe-west3-docker.pkg.dev/mbei-test/mbeirepo/mbei:latest
+        imagePullPolicy: Always
+        name: mbei-component
+        ports:
+        - containerPort: 10000
+        volumeMounts:
+        - mountPath: /etc/config
+          name: config-volume
+      - args:
+        - -p
+        - '9999'
+        command:
+        - /usr/local/bin/mbei-scenario-server
+        env:
+        - name: RUST_LOG
+          value: info
+        image: europe-west3-docker.pkg.dev/mbei-test/mbeirepo/mbei:latest
+        imagePullPolicy: Always
+        name: scenario-server
+        ports:
+        - containerPort: 9999
+      affinity:
+        podAntiAffinity: #https://medium.com/@johnjjung/building-a-kubernetes-daemonstatefulset-30ad0592d8cb
+          requiredDuringSchedulingIgnoredDuringExecution:
+            - labelSelector:
+                matchExpressions:
+                  - key: "app"
+                    operator: In
+                    values:
+                      - mbei-component
+              topologyKey: "kubernetes.io/hostname"
+      volumes:
+      - configMap:
+          name: component-config
+        name: config-volume
+      - configMap:
+          name: query-assignments
+        name: query-assignments-volume

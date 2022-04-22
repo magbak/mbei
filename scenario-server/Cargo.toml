@@ -1,0 +1,17 @@
+[package]
+name = "mbei-scenario-server"
+version = "0.1.0"
+edition = "2021"
+license-file = "LICENSE"
+
+[dependencies]
+env_logger = "0.9.0"
+log = "0.4.14"
+tokio = {version="1.15.0", features = ["rt-multi-thread"] }
+tonic = "0.6.2"
+prost = "0.9.0"
+bincode = "2.0.0-beta.1"
+structopt = { version = "0.3", default-features = false }
+
+[build-dependencies]
+tonic-build = "0.6.2"

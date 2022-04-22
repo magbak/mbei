@@ -1,0 +1,40 @@
+syntax = "proto3";
+
+package process_update;
+
+import "delta.proto";
+import "event.proto";
+
+service ProcessUpdate {
+  rpc Send(ProcessUpdateRequest) returns (ProcessUpdateResponse);
+}
+
+message ProcessUpdateRequest {
+  oneof update {
+    Stop stop = 1;
+    event.Event event = 2;
+    Deltas deltas = 3;
+    Retractions retractions = 4;
+  }
+}
+
+message ProcessUpdateResponse {
+  uint32 queue_size = 1;
+}
+
+message Stop {
+}
+
+message Deltas {
+  string deltas_id = 1;
+  string origin_id = 2;
+  uint64 origin_timestamp = 3;
+  repeated delta.Delta deltas = 4;
+}
+
+message Retractions {
+  string retraction_id = 1;
+  uint64 origin_timestamp = 2;
+  repeated string delta_ids = 3;
+}
+

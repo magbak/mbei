@@ -1,0 +1,25 @@
+[package]
+name = "mbei-component"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+mbei-core = {path = "../core"}
+mbei-grpc = {path = "../grpc" }
+bincode = "2.0.0-beta.1"
+env_logger = "0.9.0"
+log = "0.4.14"
+uuid = { version = "0.8", features = ["v4"] }
+structopt = { version = "0.3", default-features = false }
+serde = { version = "1.0.132", features = ["derive"] }
+serde_yaml = "0.8.23"
+tokio = {version="1.15.0", features = ["rt-multi-thread", "sync"] }
+tonic = "0.6.2"
+prost = "0.9.0"
+hostname = "0.3.1"
+backoff = { version = "0.4.0", features = ["tokio"] }
+
+[dev-dependencies]
+rstest = "0.12.0"
+serial_test = "0.5.1"
+env_logger = "0.9.0"

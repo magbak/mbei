@@ -1,0 +1,59 @@
+syntax = "proto3";
+
+package application_component;
+import "delta.proto";
+import "event.proto";
+
+service CallApplication {
+  rpc Send(ApplicationRequest) returns (ApplicationResponse);
+}
+
+message OptionalString {
+  string s = 1;
+}
+
+message QueryNode {
+  string query_node_name = 1;
+  OptionalString instance_node_id = 2;
+  OptionalString node_type = 3;
+  delta.NodeClass node_class = 4;
+}
+
+message QueryEdge {
+  QueryNode src = 1;
+  QueryNode trg = 2;
+  string edge_type = 3;
+}
+
+message InstanceEdge {
+  delta.InstanceNode src = 1;
+  delta.InstanceNode trg = 2;
+  uint64 from_timestamp = 4;
+  string edge_type = 3;
+}
+
+message MatchTuple {
+  QueryEdge src = 1;
+  InstanceEdge trg = 2;
+}
+
+message Match {
+  repeated MatchTuple tuples = 1;
+}
+
+enum DeltaType {
+  ADDITION = 0;
+  REMOVAL = 1;
+}
+
+message ApplicationRequest {
+  string query_name = 1;
+  string application_name = 2;
+  repeated Match matches = 3;
+  repeated QueryEdge query_graph = 4;
+  event.Event event = 5;
+}
+
+message ApplicationResponse {
+  repeated delta.Delta deltas = 1;
+}
