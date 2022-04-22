@@ -4,8 +4,8 @@ from time import sleep
 
 import yaml
 
-cluster_sizes = [9,12]
-scenario_sizes = [4,8,16,32]
+cluster_sizes = [9, 12]
+scenario_sizes = [4, 8, 16, 32]
 
 print(f"Cluster sizes: {cluster_sizes}")
 print(f"Scenario sizes: {scenario_sizes}")
@@ -138,7 +138,7 @@ for c in cluster_sizes:
 
         #Wait for benchmark to complete
         print("Waiting for benchmark to complete")
-        wait_for_benchmark_cmd = ["kubectl", "wait", "job.batch/perftest-job", "--for=condition=complete", "--timeout=900s"]
+        wait_for_benchmark_cmd = ["kubectl", "wait", "job.batch/perftest-job", "--for=condition=complete", "--timeout=600s"]
         print(f"Running command: {' '.join(wait_for_benchmark_cmd)}")
         code = subprocess.run(wait_for_benchmark_cmd)
         if code.returncode != 0:

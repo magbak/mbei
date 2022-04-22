@@ -80,13 +80,10 @@ Note that scenario sizes are even numbers >= 2.
 $ python testscript.py
 ```
 The table below describes what test scripts were used in what experiments.
-In order to run experiment C it is necessary to check out a special branch which modifies our code.
-Downloading logs through kubectl has proved unreliable. 
-For experiment D I recommend downloading the logs from cloud storage. 
-It is best to set up a [sink](https://cloud.google.com/logging/docs/routing/overview) first to avoid manual copying.
+In order to run experiment C it is necessary to check out a special branch which modifies our code. 
 
 |Script name| Branch       |Experiment|
 |-------------|--------------|-----------|
 |testscript.py| main         |Experiment A|
+|testscript-reverse.py | main         | Experiment B |
 |testscript.py| experimentC  | Experiment C |
-|testscript-latency.py | main | Experiment D |

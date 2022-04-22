@@ -81,19 +81,14 @@ impl ConveyorApplication {
         query_graph: &Vec<QueryEdge>) -> Result<Response<ApplicationResponse>, Status> {
         assert_eq!(matches.len(), 1);
         let single_match = matches.get(0).unwrap();
-        assert_eq!(single_match.tuples.len(), 2);
+        assert_eq!(single_match.tuples.len(), 1);
         let mut barrel_at_conveyor = None;
-        let mut barrel_has_type = None;
         for t in &single_match.tuples {
             if t.src.as_ref().unwrap().edge_type == "At" {
                 barrel_at_conveyor = t.trg.as_ref();
-            } else if t.src.as_ref().unwrap().edge_type == "HasMaterialType" {
-                    barrel_has_type = t.trg.as_ref();
-
             }
         }
         assert!(barrel_at_conveyor.is_some());
-        assert!(barrel_has_type.is_some());
 
         let mut plastic_ramp = None;
         let mut metal_ramp = None;
@@ -115,9 +110,15 @@ impl ConveyorApplication {
             timestamp,
             delta_type: DeltaType::Removal as i32,
         };
-        let (barrel_type, _): (BarrelMaterialType, usize)  = bincode::decode_from_slice(
-            &barrel_has_type.unwrap().trg.as_ref().unwrap().value.as_ref().unwrap().b,
-            self.config).expect("Decoding problem");
+
+        //In experiment C we just determine barrel type from the timestamp
+        let barrel_type;
+        if timestamp % 2 == 0 {
+            barrel_type = BarrelMaterialType::Metal;
+        } else {
+            barrel_type = BarrelMaterialType::Plastic;
+        }
+            
         let trg_node = match barrel_type {
             BarrelMaterialType::Metal => {metal_ramp.unwrap()}
             BarrelMaterialType::Plastic => {plastic_ramp.unwrap()}

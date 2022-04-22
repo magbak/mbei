@@ -34,9 +34,6 @@ pub struct Cli {
 
     #[structopt(short = "-r", long = "--reverse")]
     pub reverse: Option<bool>,
-
-    #[structopt(short = "-l", long = "--latency")]
-    pub latency: Option<bool>,
 }
 
 #[tokio::main]
@@ -60,21 +57,13 @@ async fn main() {
         None => {false}
         Some(t) => {t}
     };
-    let latency = match cli.latency {
-        None => {false},
-        Some(t) => {t}
-    };
-    if !reverse && !latency {
+    if !reverse {
         info!("Sending messages in normal order");
         producer.send_messages_in_vec_until_max_queue(messages, 20, 100, 10, 1000).await;
     }
-    else if reverse {
+    else {
         info!("Sending messages in reversed order");
         producer.send_reversed_messages_in_vec_until_max_queue(messages, 20, 100, 10, 1000).await;
-    }
-    else {
-        info!("Sending messages in fixed rate to measure latency");
-        producer.send_messages_in_vec_until_max_queue(messages, 20, 300, 0, 1000000).await;
     }
     info!("Finished sending messages");
 }

@@ -251,8 +251,6 @@ pub fn conveyor_query() -> Query {
     let conveyor_has_metal_ramp =
         Edge::without_timestamp(conveyor.clone(), metal_ramp.clone(), "HasMetalRamp");
     let barrel = Node::material_query_node("b", "Barrel");
-    let barrel_material_type = Node::property_query_node("t", "BarrelMaterialType");
-    let barrel_has_material_type = Edge::without_timestamp(barrel.clone(), barrel_material_type, "HasMaterialType");
     let barrel_at_conveyor = Edge::without_timestamp(barrel.clone(), conveyor.clone(), "At");
     let barrel_at_plastic_ramp = Edge::without_timestamp(barrel.clone(), plastic_ramp, "At");
     let barrel_at_metal_ramp = Edge::without_timestamp(barrel.clone(), metal_ramp, "At");
@@ -265,7 +263,6 @@ pub fn conveyor_query() -> Query {
         conveyor_has_conveyor_event,
         conveyor_has_plastic_ramp,
         barrel_at_conveyor,
-        barrel_has_material_type,
         conveyor_has_metal_ramp,
     ]);
 

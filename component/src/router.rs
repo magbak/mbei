@@ -15,7 +15,7 @@ limitations under the License.*/
 use std::collections::{BTreeMap, BTreeSet};
 use std::time::Duration;
 
-use log::debug;
+use log::{debug, info};
 use tokio::task::JoinHandle;
 use tonic::{Response, Status};
 use tonic::transport::Channel;
@@ -59,7 +59,7 @@ impl Router {
                 reached_set.insert(qname.clone());
             }
         }
-        debug!("{} forward map {:?}", &query_name, &owned_edge_forward_map);
+        info!("{} forward map {:?}", &query_name, &owned_edge_forward_map);
         Router {
             query_name,
             edge_forward_map:owned_edge_forward_map,

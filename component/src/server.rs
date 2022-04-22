@@ -86,32 +86,20 @@ impl ComponentServer {
                     }
                     non_stop_update => {
                         info!("{} received update", &self.query_name);
-                        let update_type = match &non_stop_update {
-                            Update::Stop => {"stop"}
-                            Update::Event(_) => {"event"}
-                            Update::Deltas(_) => {"deltas"}
-                            Update::Retractions(_) => {"retractions"}
-                        };
-                        let (handles, n_deltas, n_events, n_retractions, n_reprocessing, n_open_edges) = self
+                        let handles = self
                             .component
                             .process_update_until_consistency(non_stop_update)
                             .await;
                         for h in handles {
                             self.handle_sender.send(h).expect("Error sending handle");
                         }
-                        info!(
-                            "{} message processing took {} μs, first update: {}, n_deltas: {}, n_events: {}, n_retractions: {}, n_reprocessing: {}, n_open_edges: {}",
-                            &self.query_name,
-                            now.elapsed().as_micros(),
-                            update_type,
-                            n_deltas,
-                            n_events,
-                            n_retractions,
-                            n_reprocessing,
-                            n_open_edges
-                )
                     }
                 }
+                info!(
+                    "{} message processing took {} μs",
+                    &self.query_name,
+                    now.elapsed().as_micros()
+                );
             } else {
                 new_update_receiver.recv().await;
             }
